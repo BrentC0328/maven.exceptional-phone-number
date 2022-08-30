@@ -4,6 +4,8 @@ import com.zipcodewilmington.exceptions.InvalidPhoneNumberFormatException;
 import com.zipcodewilmington.tools.RandomNumberFactory;
 
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 /**
@@ -50,12 +52,14 @@ public final class PhoneNumberFactory {
      */ //TODO - if input is valid, return respective PhoneNumber object, else return null
     public static PhoneNumber createPhoneNumberSafely(int areaCode, int centralOfficeCode, int phoneLineCode) {
         String safeNumber = "";
-        safeNumber = safeNumber + areaCode + centralOfficeCode + phoneLineCode;
+        safeNumber =  "(" + areaCode + ")-" + centralOfficeCode + "-" + phoneLineCode;
+
         PhoneNumber safelyCreatedNumber;
+
         try {
-            createPhoneNumber(safeNumber);
-            safelyCreatedNumber = new PhoneNumber(safeNumber);
+            safelyCreatedNumber = createPhoneNumber(safeNumber);
         } catch (InvalidPhoneNumberFormatException whoops) {
+            logger.log(Level.INFO, safeNumber + "is not a valid phone number.");
             return null;
         }
 
@@ -68,27 +72,17 @@ public final class PhoneNumberFactory {
      * @throws InvalidPhoneNumberFormatException - thrown if phoneNumberString does not match acceptable format
      */ // TODO - Add throws statement to method signature
     public static PhoneNumber createPhoneNumber(String phoneNumberString) throws InvalidPhoneNumberFormatException {
-
+        logger.log(Level.INFO,"Attempting to create a new PhoneNumber object with a value of " + phoneNumberString );
         PhoneNumber telephoneNumber = new PhoneNumber(phoneNumberString);
-
-        //        String areaCode = telephoneNumber.getAreaCode();
-//        String centralOfficeCode = telephoneNumber.getCentralOfficeCode();
-//        String phoneLineCode = telephoneNumber.getPhoneLineCode();
-
-        PhoneNumber formattedNumber = new PhoneNumber("(" + telephoneNumber.getAreaCode() + ")-"
-                + telephoneNumber.getCentralOfficeCode() + "-"
-                + telephoneNumber.getPhoneLineCode());
-
-
-        //        String telephoneNumber = "("+phoneNumberString.substring(0, 3) +")-"
-//                +phoneNumberString.substring(3, 6) +"-"
-//                +phoneNumberString.substring(6, 10);
-//
-        if (phoneNumberString.length() == formattedNumber.toString().length()) {
-            throw new InvalidPhoneNumberFormatException();
-        }
-//        PhoneNumber result = telephoneNumber;
-
-        return formattedNumber;
+        return telephoneNumber;
     }
-}
+
+//    What is a variable
+//    What is a method
+//    What is a constructor? and how does it differ from a method?
+//    What is a class and what is its relationship to `types`
+//    createPhoneNumberSafely(2,null,8)
+
+ }
+
+
